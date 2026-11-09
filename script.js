@@ -37,6 +37,7 @@
 
     function unlock() {
       try { sessionStorage.setItem('madhupotti-unlocked', '1'); } catch (e) {}
+      document.body.classList.add('app-unlocked');
       gate.classList.add('is-unlocked');
       setTimeout(openInvitation, 420);
     }
@@ -155,6 +156,32 @@
       if (next) {
         setTimeout(function () { initReveals(); }, 40);
       }
+    });
+  })();
+
+  /* =========================================================
+      SECTION RAIL
+      ========================================================= */
+  (function setupSectionRail() {
+    var rail = $('.section-rail');
+    if (!rail) return;
+    var toggle = $('#moreToggle');
+    var panels = $$('.more-content');
+    rail.addEventListener('click', function (ev) {
+      var button = ev.target.closest('[data-section-target]');
+      if (!button) return;
+      var target = document.getElementById(button.getAttribute('data-section-target'));
+      if (!target) return;
+      var needsExpand = panels.some(function (panel) { return panel.hidden; });
+      if (needsExpand && toggle) {
+        toggle.setAttribute('aria-expanded', 'true');
+        panels.forEach(function (panel) { panel.hidden = false; });
+        initReveals();
+      }
+      var section = target.closest('section') || target;
+      window.setTimeout(function () {
+        section.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
+      }, 50);
     });
   })();
 

@@ -1283,3 +1283,39 @@ body[data-theme="midnight"] .muhurtham-card,body[data-theme="midnight"] .gift-ca
 body[data-theme="midnight"] .access-gate{background:radial-gradient(circle at 50% 10%,rgba(42,75,57,.8),transparent 52%),linear-gradient(145deg,#0b1712,#1d3027)}
 body[data-theme="midnight"] .access-card{background:rgba(20,39,30,.88);border-color:rgba(230,189,121,.3)}body[data-theme="midnight"] .access-form input{background:rgba(8,20,14,.62);border-color:rgba(230,189,121,.32)}
 .compact-toggle-wrap{display:flex;justify-content:center;margin:clamp(24px,5vw,40px) auto clamp(10px,2vw,18px);padding:0 18px}.compact-toggle{display:flex;align-items:center;gap:12px;width:min(430px,100%);padding:14px 18px;border:1px solid rgba(184,147,90,.42);border-radius:18px;background:linear-gradient(135deg,rgba(255,253,248,.9),rgba(245,234,214,.68));color:var(--maroon);cursor:pointer;box-shadow:var(--shadow-sm);text-align:left;transition:transform .3s var(--ease),box-shadow .3s var(--ease),background .3s}.compact-toggle:hover{transform:translateY(-3px);box-shadow:var(--shadow)}.compact-toggle-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--gold-2);color:#3a2605;font:500 1.3rem var(--font-sans);transition:transform .35s var(--ease)}.compact-toggle span:last-child{display:grid;gap:2px}.compact-toggle strong{font:600 .94rem var(--font-sans);letter-spacing:.02em}.compact-toggle small{font:400 .78rem var(--font-te);color:var(--ink-soft)}.compact-toggle[aria-expanded="true"] .compact-toggle-icon{transform:rotate(45deg)}.more-content{overflow:hidden}.more-content[hidden]{display:none}.more-content--continued{margin-top:0}body[data-theme="midnight"] .compact-toggle{background:linear-gradient(135deg,rgba(39,65,51,.9),rgba(20,39,30,.84));border-color:rgba(230,189,121,.3)}
+
+
+/* =========================================================
+   SECTIONED MOBILE EXPERIENCE + GLASS STORY
+   =========================================================
+.access-gate.is-unlocked .access-card{animation:accessUnlock .55s var(--ease) both}
+@keyframes accessUnlock{to{opacity:0;transform:scale(1.06) translateY(-12px);filter:blur(4px)}}
+body.app-unlocked .section-hero{animation:unlockedHero .9s var(--ease) .35s both}
+@keyframes unlockedHero{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.section{scroll-margin-top:18px}
+.section-rail{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:4px clamp(18px,4vw,26px) 8px;margin:4px auto 0;max-width:980px;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+.section-rail::-webkit-scrollbar{display:none}
+.section-rail button{flex:0 0 auto;padding:9px 13px;border:1px solid rgba(184,147,90,.36);border-radius:999px;background:rgba(255,253,248,.7);color:var(--maroon);font:500 .72rem var(--font-sans);letter-spacing:.06em;cursor:pointer;white-space:nowrap;box-shadow:0 5px 14px rgba(92,64,22,.07);transition:transform .25s var(--ease),background .25s,border-color .25s}
+.section-rail button:hover,.section-rail button:focus-visible{transform:translateY(-2px);background:var(--gold-3);border-color:var(--gold)}
+.story-card{overflow:hidden;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);background:linear-gradient(145deg,rgba(255,253,248,.68),rgba(255,255,255,.24));box-shadow:0 18px 38px rgba(92,64,22,.12),inset 0 1px 0 rgba(255,255,255,.72);transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s}
+.story-card::before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,rgba(255,255,255,.25),transparent 42%,rgba(212,169,103,.08));opacity:.8}
+.story-card:hover{transform:translateY(-5px);box-shadow:0 24px 50px rgba(92,64,22,.18);border-color:rgba(184,147,90,.62)}
+.story-card>*{position:relative}
+body[data-theme="midnight"] .section-rail button{background:rgba(20,39,30,.86);color:var(--gold-3);border-color:rgba(230,189,121,.28)}
+body[data-theme="midnight"] .story-card{background:linear-gradient(145deg,rgba(57,89,70,.7),rgba(20,39,30,.45));box-shadow:0 18px 38px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.12)}
+
+/* Keep the three portraits in one elegant row even on phones. */
+@media (min-width:360px) and (max-width:719px){
+  .couple-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(7px,2.5vw,14px);align-items:start}
+  .couple-card,.couple-card--center{max-width:none;min-width:0}
+  .couple-card .photo-arch,.couple-card--center .photo-arch{aspect-ratio:3/4;border-radius:999px 999px 10px 10px;box-shadow:0 8px 18px rgba(92,64,22,.12),inset 0 0 0 3px rgba(255,253,248,.42)}
+  .couple-card figcaption{margin-top:8px;gap:2px}
+  .couple-role{font-size:clamp(.46rem,1.65vw,.6rem);letter-spacing:.08em;line-height:1.2}
+  .couple-name{font-size:clamp(.72rem,2.65vw,.94rem);line-height:1.05;overflow-wrap:anywhere}
+  .couple-name-te{font-size:clamp(.62rem,2.3vw,.78rem)}
+}
+@media (max-width:359px){
+  .couple-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+  .couple-role{font-size:.43rem;letter-spacing:.04em}.couple-name{font-size:.68rem}.couple-name-te{font-size:.58rem}
+}
+@media (prefers-reduced-motion: reduce){.access-gate.is-unlocked .access-card,body.app-unlocked .section-hero{animation:none}.story-card{transition:none}}

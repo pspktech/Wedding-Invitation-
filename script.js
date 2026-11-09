@@ -192,9 +192,9 @@
     var panels = $$('.more-content');
     var allSections = $$('section, footer', invitation);
     var groups = {
-      home: ['.section-hero', '.section--blessing'],
+      home: ['.section-hero', '.section--blessing', '.section--families'],
       couple: ['.section--couple'],
-      story: ['.section--story', '.section--journey', '.section--families'],
+      story: ['.section--story', '.section--journey'],
       events: ['.section--muhurtham', '.section--events', '.section--location'],
       gallery: ['.section--gallery'],
       gifts: ['.section--blessings', '.footer']

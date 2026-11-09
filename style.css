@@ -1353,3 +1353,19 @@ body[data-theme="midnight"] .journey-card{background:linear-gradient(145deg,rgba
 body[data-theme="midnight"] .journey-card h3{color:var(--gold-3)}
 @media(max-width:600px){.journey-timeline{padding-left:18px}.journey-timeline::before{left:18px;transform:none}.journey-step,.journey-step--right{width:100%;margin-left:0;padding:0 0 18px 42px;justify-content:flex-start;text-align:left}.journey-dot,.journey-step--right .journey-dot{left:4px;right:auto}.journey-card{width:100%;padding:16px 17px}.journey-card h3{font-size:1.12rem}}
 @media(prefers-reduced-motion:reduce){.section--couple .couple-card,.section--couple .couple-card--center,.section--couple .couple-card img,.journey-card{transition:none;animation:none}.section--couple .couple-card{opacity:1;transform:none}}
+
+/* =========================================================
+   COUPLE SCREEN — CLEAN LARGE PORTRAITS
+   ========================================================= */
+#invitation[data-active-screen="couple"] .section--couple .container--wide{max-width:1120px;padding-left:clamp(12px,3vw,34px);padding-right:clamp(12px,3vw,34px)}
+#invitation[data-active-screen="couple"] .section--couple .section-head{margin-bottom:clamp(22px,5vw,42px)}
+#invitation[data-active-screen="couple"] .couple-grid{gap:clamp(10px,3vw,30px)}
+#invitation[data-active-screen="couple"] .couple-card{max-width:none}
+#invitation[data-active-screen="couple"] .couple-card .photo-arch{aspect-ratio:3/4;border-radius:999px 999px 18px 18px;box-shadow:0 14px 30px rgba(92,64,22,.14),inset 0 0 0 5px rgba(255,253,248,.5)}
+#invitation[data-active-screen="couple"] .couple-card--center .photo-arch{box-shadow:0 22px 44px rgba(92,64,22,.2),inset 0 0 0 7px rgba(255,253,248,.58)}
+#invitation[data-active-screen="couple"] .couple-card figcaption{margin-top:clamp(9px,2vw,16px)}
+#invitation[data-active-screen="couple"] .couple-role{font-size:clamp(.5rem,1.6vw,.72rem);letter-spacing:clamp(.06em,.2vw,.22em)}
+#invitation[data-active-screen="couple"] .couple-name{font-size:clamp(.78rem,2.8vw,1.2rem);line-height:1.08}
+#invitation[data-active-screen="couple"] .couple-name-te{font-size:clamp(.66rem,2.2vw,.9rem)}
+@media(min-width:720px){#invitation[data-active-screen="couple"] .couple-grid{grid-template-columns:1fr 1.12fr 1fr;align-items:start}#invitation[data-active-screen="couple"] .couple-card--center{transform:translateY(-18px)}}
+@media(max-width:420px){#invitation[data-active-screen="couple"] .couple-grid{gap:8px}#invitation[data-active-screen="couple"] .couple-card .photo-arch{aspect-ratio:3/4;border-radius:999px 999px 12px 12px}#invitation[data-active-screen="couple"] .couple-name{font-size:clamp(.7rem,2.9vw,.9rem)}}

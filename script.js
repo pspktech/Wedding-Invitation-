@@ -809,6 +809,23 @@
       return false;
     }
     function setStatus(text) { if (statusEl) statusEl.textContent = text || ''; }
+    function fallbackNotes(data) {
+      var body = String(data.body || '').replace(/\[?Full Changelog\]?/ig, '').replace(/https?:\/\/\S+/g, '').trim();
+      return body ? 'What\'s new\n• ' + body.replace(/\s+/g, ' ') : 'What\'s new\n• Improved invitation experience and performance.';
+    }
+    function changelog(data, current) {
+      var from = 'v' + cleanVersion(current);
+      var to = data.tag_name;
+      return fetch('https://api.github.com/repos/pspktech/Wedding-Invitation-/compare/' + from + '...' + encodeURIComponent(to), { headers: { Accept: 'application/vnd.github+json' } })
+        .then(function (res) { if (!res.ok) throw new Error('compare unavailable'); return res.json(); })
+        .then(function (comparison) {
+          var commits = (comparison.commits || []).map(function (commit) {
+            return (commit.commit && commit.commit.message ? commit.commit.message.split('\n')[0] : '').replace(/\s+/g, ' ').trim();
+          }).filter(Boolean).slice(-6);
+          return commits.length ? 'What\'s new\n' + commits.map(function (message) { return '• ' + message; }).join('\n') : fallbackNotes(data);
+        })
+        .catch(function () { return fallbackNotes(data); });
+    }
     function currentVersion() {
       var p = plugin();
       if (p && p.getAppVersion) return p.getAppVersion().then(function (result) { return result.version || '1.0.0'; });
@@ -833,8 +850,10 @@
         if (!data || data.draft || data.prerelease || !isNewer(data.tag_name, result.current)) return;
         var asset = (data.assets || []).find(function (item) { return item.name && item.name.toLowerCase().endsWith('.apk'); });
         if (!asset) return;
-        release = { version: cleanVersion(data.tag_name), notes: data.body || '', url: asset.browser_download_url, name: asset.name };
-        showUpdate(release.version, release.notes);
+        return changelog(data, result.current).then(function (notes) {
+          release = { version: cleanVersion(data.tag_name), notes: notes, url: asset.browser_download_url, name: asset.name };
+          showUpdate(release.version, release.notes);
+        });
       }).catch(function () {});
     }
     function pollDownload() {

@@ -8,7 +8,7 @@
       ⚠️ CONFIG — CHANGE THIS!
       ⚠️ Mee email ikkada pettu. Blessings ikkadiki vastayi.
       ========================================================= */
-  var YOUR_EMAIL = 'youremail@gmail.com';
+  var YOUR_EMAIL = 'pawankalyanfan110@gmail.com';
   /* ========================================================= */
 
   var $  = function (sel, root) { return (root || document).querySelector(sel); };

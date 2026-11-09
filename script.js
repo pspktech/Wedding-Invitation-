@@ -1,13 +1,13 @@
 /* =========================================================
-   Wedding Invitation — script.js (FINAL)
-   ========================================================= */
+    Wedding Invitation — script.js (FINAL)
+    ========================================================= */
 (function () {
   'use strict';
 
   /* =========================================================
-     ⚠️ CONFIG — CHANGE THIS!
-     ⚠️ Mee email ikkada pettu. Blessings ikkadiki vastayi.
-     ========================================================= */
+      ⚠️ CONFIG — CHANGE THIS!
+      ⚠️ Mee email ikkada pettu. Blessings ikkadiki vastayi.
+      ========================================================= */
   var YOUR_EMAIL = 'youremail@gmail.com';
   /* ========================================================= */
 
@@ -25,8 +25,8 @@
   var fadeTimer = null;
 
   /* =========================================================
-     MUSIC
-     ========================================================= */
+      MUSIC
+      ========================================================= */
   function fadeAudioIn() {
     if (!audio) return;
     var target = 0.28;
@@ -71,8 +71,8 @@
   }
 
   /* =========================================================
-     OPEN INVITATION
-     ========================================================= */
+      OPEN INVITATION
+      ========================================================= */
   function openInvitation() {
     if (opened) return;
     opened = true;
@@ -104,8 +104,8 @@
   if (openBtn) openBtn.addEventListener('click', openInvitation);
 
   /* =========================================================
-     MUTE
-     ========================================================= */
+      MUTE
+      ========================================================= */
   if (muteBtn && audio) {
     muteBtn.addEventListener('click', function () {
       if (audio.paused) {
@@ -122,8 +122,8 @@
   }
 
   /* =========================================================
-     SCROLL REVEAL
-     ========================================================= */
+      SCROLL REVEAL
+      ========================================================= */
   function initReveals() {
     var els = $$('.reveal');
     if (!els.length) return;
@@ -143,8 +143,8 @@
   }
 
   /* =========================================================
-     LEAVES
-     ========================================================= */
+      LEAVES
+      ========================================================= */
   function buildLeaves() {
     var layer = $('#leafLayer');
     if (!layer) return;
@@ -195,12 +195,12 @@
   }
 
   /* =========================================================
-     COUNTDOWN
-     ========================================================= */
+      COUNTDOWN
+      ========================================================= */
   (function setupCountdown() {
-    var WEDDING_TS = Date.parse('2026-02-07T11:11:00+05:30');
+    var WEDDING_TS = Date.parse('2027-02-07T11:11:00+05:30');
     if (isNaN(WEDDING_TS)) {
-      WEDDING_TS = new Date(2026, 1, 7, 11, 11, 0).getTime();
+      WEDDING_TS = new Date(2027, 1, 7, 11, 11, 0).getTime();
       console.warn('[Countdown] ISO parse failed, using fallback');
     }
     console.log('[Countdown] Target:', new Date(WEDDING_TS).toString());
@@ -242,7 +242,7 @@
       if (diff <= 0) {
         setNum('d', 0); setNum('h', 0); setNum('m', 0); setNum('s', 0);
         var note = document.getElementById('cdNote');
-        if (note) note.textContent = 'శుభం! The wedding day is here · 07 Feb 2026';
+        if (note) note.textContent = 'శుభం! The wedding day is here · 07 Feb 2027';
         return false;
       }
       var total = Math.floor(diff / 1000);
@@ -271,8 +271,8 @@
   })();
 
   /* =========================================================
-     WISHES / BLESSINGS — save + email
-     ========================================================= */
+      WISHES / BLESSINGS — save + email
+      ========================================================= */
   (function setupWishes() {
     var WISHES_KEY = 'weddingWishes';
     var form = $('#wishForm');
@@ -430,8 +430,8 @@
   })();
 
   /* =========================================================
-     GIFT QR DIALOG — LOCAL IMAGE
-     ========================================================= */
+      GIFT QR DIALOG — LOCAL IMAGE
+      ========================================================= */
   (function setupGiftQr() {
     var btn      = $('#openGiftQr');
     var dialog   = $('#qrDialog');
@@ -476,8 +476,8 @@
   })();
 
   /* =========================================================
-     GALLERY LIGHTBOX
-     ========================================================= */
+      GALLERY LIGHTBOX
+      ========================================================= */
   (function setupGallery() {
     var grid = $('#galleryGrid');
     if (!grid) return;

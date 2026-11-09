@@ -25,6 +25,43 @@
   var fadeTimer = null;
 
   /* =========================================================
+      PRIVATE INVITATION ACCESS
+      ========================================================= */
+  (function setupAccessGate() {
+    var APP_PASSCODE = '8374625736';
+    var gate = $('#accessGate');
+    var form = $('#accessForm');
+    var input = $('#accessCode');
+    var error = $('#accessError');
+    if (!gate || !form || !input) return;
+
+    function unlock() {
+      try { sessionStorage.setItem('madhupotti-unlocked', '1'); } catch (e) {}
+      gate.classList.add('is-unlocked');
+      setTimeout(openInvitation, 420);
+    }
+
+    var alreadyUnlocked = false;
+    try { alreadyUnlocked = sessionStorage.getItem('madhupotti-unlocked') === '1'; } catch (e) {}
+    if (alreadyUnlocked) unlock();
+
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var value = input.value.replace(/\D/g, '').slice(0, 10);
+      input.value = value;
+      if (value === APP_PASSCODE) {
+        if (error) error.textContent = '';
+        input.removeAttribute('aria-invalid');
+        unlock();
+      } else {
+        if (error) error.textContent = 'That number did not match. Please try again.';
+        input.setAttribute('aria-invalid', 'true');
+        input.select();
+      }
+    });
+  })();
+
+  /* =========================================================
       MUSIC
       ========================================================= */
   function fadeAudioIn() {
@@ -102,6 +139,24 @@
   }
 
   if (openBtn) openBtn.addEventListener('click', openInvitation);
+
+  /* =========================================================
+      COMPACT INVITATION CONTENT
+      ========================================================= */
+  (function setupCompactContent() {
+    var toggle = $('#moreToggle');
+    var panels = $$('.more-content');
+    if (!toggle || !panels.length) return;
+    toggle.addEventListener('click', function () {
+      var expanded = toggle.getAttribute('aria-expanded') === 'true';
+      var next = !expanded;
+      toggle.setAttribute('aria-expanded', String(next));
+      panels.forEach(function (panel) { panel.hidden = !next; });
+      if (next) {
+        setTimeout(function () { initReveals(); }, 40);
+      }
+    });
+  })();
 
   /* =========================================================
       MUTE

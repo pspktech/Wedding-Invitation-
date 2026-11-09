@@ -91,6 +91,22 @@
   <svg class="corner corner--br" viewBox="0 0 220 220"><use href="#corner-vine"/></svg>
 </div>
 
+<!-- ===== ACCESS GATE ===== -->
+<section class="access-gate" id="accessGate" aria-labelledby="accessTitle">
+  <div class="access-card">
+    <div class="access-seal" aria-hidden="true">M♥T</div>
+    <p class="access-brand">MadhuPotti</p>
+    <h1 id="accessTitle">A private invitation</h1>
+    <p class="access-copy">Enter the bride's number to open the celebration.</p>
+    <form id="accessForm" class="access-form">
+      <label for="accessCode">Bride's number</label>
+      <input id="accessCode" type="tel" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="Enter 10-digit number" required>
+      <button class="btn btn-open" type="submit"><span>Unlock Invitation</span><small>ఆహ్వానం తెరవండి</small></button>
+      <p class="access-error" id="accessError" role="alert" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
 <!-- ===== COVER ===== -->
 <div class="cover" id="cover">
   <div class="cover-inner">
@@ -210,6 +226,15 @@
     </div>
   </section>
 
+  <div class="compact-toggle-wrap">
+    <button class="compact-toggle" id="moreToggle" type="button" aria-expanded="false" aria-controls="moreContent">
+      <span class="compact-toggle-icon" aria-hidden="true">＋</span>
+      <span><strong>Explore the full celebration</strong><small>Story · Events · Gallery · RSVP</small></span>
+    </button>
+  </div>
+
+  <div class="more-content" id="moreContent" hidden>
+
   <!-- 4. OUR STORY -->
   <section class="section section--story reveal" aria-labelledby="storyTitle">
     <div class="container">
@@ -263,6 +288,8 @@
     </div>
   </section>
 
+  </div>
+
   <!-- 6. MUHURTHAM (Premium card with countdown) -->
   <section class="section section--muhurtham reveal" aria-labelledby="muhurthamTitle">
     <div class="container">
@@ -313,6 +340,8 @@
       </div>
     </div>
   </section>
+
+  <div class="more-content more-content--continued" hidden>
 
   <!-- 7. EVENTS & CALENDAR -->
   <section class="section section--events reveal" aria-labelledby="eventsTitle">
@@ -507,6 +536,8 @@
       <p class="foot-names gold-text">Madhukar &amp; Thanasri</p>
     </div>
   </footer>
+
+  </div>
 
 </main>
 

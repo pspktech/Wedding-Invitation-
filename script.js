@@ -1,10 +1,18 @@
 /* =========================================================
-   Wedding Invitation — script.js (Fixed + Scroll Reveal)
+   Wedding Invitation — script.js (FINAL)
    ========================================================= */
 (function () {
   'use strict';
 
-  var $ = function (sel, root) { return (root || document).querySelector(sel); };
+  /* =========================================================
+     ⚠️ CONFIG — CHANGE THIS!
+     ⚠️ Mee email ikkada pettu. Blessings ikkadiki vastayi.
+     ========================================================= */
+  var YOUR_EMAIL = 'youremail@gmail.com';
+  /* ========================================================= */
+
+  var $  = function (sel, root) { return (root || document).querySelector(sel); };
+  var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   var cover      = $('#cover');
@@ -16,7 +24,9 @@
   var opened = false;
   var fadeTimer = null;
 
-  /* ---------- Music ---------- */
+  /* =========================================================
+     MUSIC
+     ========================================================= */
   function fadeAudioIn() {
     if (!audio) return;
     var target = 0.28;
@@ -60,12 +70,14 @@
     }
   }
 
-  /* ---------- Open invitation ---------- */
+  /* =========================================================
+     OPEN INVITATION
+     ========================================================= */
   function openInvitation() {
     if (opened) return;
     opened = true;
 
-    try { startMusic(); } catch (e) { /* ignore */ }
+    try { startMusic(); } catch (e) {}
 
     document.body.classList.remove('is-locked');
 
@@ -74,10 +86,7 @@
       cover.setAttribute('aria-hidden', 'true');
       if ('inert' in HTMLElement.prototype) cover.inert = true;
     }
-
-    if (invitation) {
-      invitation.classList.add('is-visible');
-    }
+    if (invitation) invitation.classList.add('is-visible');
 
     setTimeout(function () {
       if (cover) cover.hidden = true;
@@ -86,14 +95,17 @@
         catch (e) { invitation.focus(); }
       }
       initReveals();
+      if (typeof window.__refreshCountdown === 'function') {
+        window.__refreshCountdown();
+      }
     }, 950);
   }
 
-  if (openBtn) {
-    openBtn.addEventListener('click', openInvitation);
-  }
+  if (openBtn) openBtn.addEventListener('click', openInvitation);
 
-  /* ---------- Mute ---------- */
+  /* =========================================================
+     MUTE
+     ========================================================= */
   if (muteBtn && audio) {
     muteBtn.addEventListener('click', function () {
       if (audio.paused) {
@@ -102,29 +114,23 @@
         if (p && typeof p.then === 'function') {
           p.then(function () { fadeAudioIn(); syncMuteIcon(); })
            .catch(function () { syncMuteIcon(); });
-        } else {
-          fadeAudioIn();
-          syncMuteIcon();
-        }
-      } else {
-        audio.pause();
-        syncMuteIcon();
-      }
+        } else { fadeAudioIn(); syncMuteIcon(); }
+      } else { audio.pause(); syncMuteIcon(); }
     });
-    audio.addEventListener('play',  syncMuteIcon);
+    audio.addEventListener('play', syncMuteIcon);
     audio.addEventListener('pause', syncMuteIcon);
   }
 
-  /* ---------- Scroll reveal ---------- */
+  /* =========================================================
+     SCROLL REVEAL
+     ========================================================= */
   function initReveals() {
-    var els = document.querySelectorAll('.reveal');
+    var els = $$('.reveal');
     if (!els.length) return;
-
     if (reduceMotion.matches || !('IntersectionObserver' in window)) {
       els.forEach(function (el) { el.classList.add('is-in'); });
       return;
     }
-
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
@@ -132,12 +138,13 @@
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.14, rootMargin: '0px 0px -60px 0px' });
-
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
     els.forEach(function (el) { io.observe(el); });
   }
 
-  /* ---------- Floating leaves ---------- */
+  /* =========================================================
+     LEAVES
+     ========================================================= */
   function buildLeaves() {
     var layer = $('#leafLayer');
     if (!layer) return;
@@ -187,126 +194,335 @@
     reduceMotion.addEventListener('change', buildLeaves);
   }
 
-  /* ---------- Countdown ---------- */
-  var WEDDING_TS = new Date('2026-02-07T11:11:00+05:30').getTime();
-  var cdEls  = { d: $('#cdDays'), h: $('#cdHours'), m: $('#cdMinutes'), s: $('#cdSeconds') };
-  var cdPrev = { d: '', h: '', m: '', s: '' };
-
-  function pad(n) { return String(n).padStart(2, '0'); }
-
-  function setNum(k, v) {
-    var el = cdEls[k];
-    if (!el) return;
-    var s = pad(v);
-    if (cdPrev[k] === s) return;
-    cdPrev[k] = s;
-    el.textContent = s;
-    if (!reduceMotion.matches) {
-      el.classList.remove('is-tick');
-      void el.offsetWidth;
-      el.classList.add('is-tick');
+  /* =========================================================
+     COUNTDOWN
+     ========================================================= */
+  (function setupCountdown() {
+    var WEDDING_TS = Date.parse('2026-02-07T11:11:00+05:30');
+    if (isNaN(WEDDING_TS)) {
+      WEDDING_TS = new Date(2026, 1, 7, 11, 11, 0).getTime();
+      console.warn('[Countdown] ISO parse failed, using fallback');
     }
-  }
+    console.log('[Countdown] Target:', new Date(WEDDING_TS).toString());
+    console.log('[Countdown] Diff (ms):', WEDDING_TS - Date.now());
 
-  function tickCountdown() {
-    var diff = WEDDING_TS - Date.now();
-    if (diff <= 0) {
-      setNum('d', 0); setNum('h', 0); setNum('m', 0); setNum('s', 0);
-      var note = $('#cdNote');
-      if (note) note.textContent = 'శుభం! The wedding day is here · 07 Feb 2026';
-      return false;
+    var els = {
+      d: document.getElementById('cdDays'),
+      h: document.getElementById('cdHours'),
+      m: document.getElementById('cdMinutes'),
+      s: document.getElementById('cdSeconds')
+    };
+
+    if (!els.d || !els.h || !els.m || !els.s) {
+      console.error('[Countdown] ❌ Missing elements: cdDays / cdHours / cdMinutes / cdSeconds');
+      return;
     }
-    var t = Math.floor(diff / 1000);
-    setNum('d', Math.floor(t / 86400));
-    setNum('h', Math.floor((t % 86400) / 3600));
-    setNum('m', Math.floor((t % 3600) / 60));
-    setNum('s', t % 60);
-    return true;
-  }
+    console.log('[Countdown] ✅ All 4 elements found');
 
-  tickCountdown();
-  var cdTimer = setInterval(function () {
-    if (!tickCountdown()) clearInterval(cdTimer);
-  }, 1000);
+    var prev = { d: '', h: '', m: '', s: '' };
+    var timer = null;
 
-  /* ---------- RSVP ---------- */
-  var form     = $('#rsvpForm');
-  var success  = $('#rsvpSuccess');
-  var againBtn = $('#rsvpAgain');
+    function pad(n) { return String(n).padStart(2, '0'); }
 
-  function clearErrors() {
-    ['errName', 'errContact'].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) el.textContent = '';
+    function setNum(key, value) {
+      var el = els[key];
+      var str = pad(value);
+      if (prev[key] === str) return;
+      prev[key] = str;
+      el.textContent = str;
+      if (!reduceMotion.matches) {
+        el.classList.remove('is-tick');
+        void el.offsetWidth;
+        el.classList.add('is-tick');
+      }
+    }
+
+    function tick() {
+      var diff = WEDDING_TS - Date.now();
+      if (diff <= 0) {
+        setNum('d', 0); setNum('h', 0); setNum('m', 0); setNum('s', 0);
+        var note = document.getElementById('cdNote');
+        if (note) note.textContent = 'శుభం! The wedding day is here · 07 Feb 2026';
+        return false;
+      }
+      var total = Math.floor(diff / 1000);
+      setNum('d', Math.floor(total / 86400));
+      setNum('h', Math.floor((total % 86400) / 3600));
+      setNum('m', Math.floor((total % 3600) / 60));
+      setNum('s', total % 60);
+      return true;
+    }
+
+    window.__refreshCountdown = tick;
+    var alive = tick();
+    console.log('[Countdown] ✅ First tick done, alive:', alive);
+
+    if (alive) {
+      timer = setInterval(function () {
+        if (!tick()) clearInterval(timer);
+      }, 1000);
+      console.log('[Countdown] ⏱️  Interval running');
+    }
+
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) tick();
     });
-  }
+    window.addEventListener('focus', tick);
+  })();
 
-  function validateForm() {
-    var ok = true;
-    clearErrors();
-    var nameEl    = $('#rsvpName');
-    var contactEl = $('#rsvpContact');
-    if (!nameEl || !contactEl) return false;
+  /* =========================================================
+     WISHES / BLESSINGS — save + email
+     ========================================================= */
+  (function setupWishes() {
+    var WISHES_KEY = 'weddingWishes';
+    var form = $('#wishForm');
+    var wall = $('#wishesWall');
+    var nameEl = $('#wishName');
+    var msgEl  = $('#wishMsg');
+    var errN   = $('#errWishName');
+    var errM   = $('#errWishMsg');
+    var submitBtn = form ? form.querySelector('button[type="submit"]') : null;
 
-    if (!nameEl.value.trim() || nameEl.value.trim().length < 2) {
-      var e1 = $('#errName');
-      if (e1) e1.textContent = 'Please enter your name · దయచేసి పేరు రాయండి';
-      nameEl.setAttribute('aria-invalid', 'true');
-      ok = false;
-    } else {
-      nameEl.removeAttribute('aria-invalid');
+    function load() {
+      try {
+        var raw = localStorage.getItem(WISHES_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) { return []; }
     }
 
-    var c = contactEl.value.trim();
-    var isPhone = c.replace(/\D/g, '').length >= 7;
-    var isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c);
-    if (!c || (!isPhone && !isEmail)) {
-      var e2 = $('#errContact');
-      if (e2) e2.textContent = 'Enter a valid phone or email';
-      contactEl.setAttribute('aria-invalid', 'true');
-      ok = false;
-    } else {
-      contactEl.removeAttribute('aria-invalid');
+    function save(list) {
+      try { localStorage.setItem(WISHES_KEY, JSON.stringify(list)); } catch (e) {}
     }
-    return ok;
-  }
 
-  if (form) {
-    form.addEventListener('submit', function (ev) {
-      ev.preventDefault();
-      if (!validateForm()) return;
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
 
-      var data = {};
-      var fd = new FormData(form);
-      fd.forEach(function (v, k) { data[k] = v; });
-      data.ts = Date.now();
+    function timeAgo(ts) {
+      var diff = Math.floor((Date.now() - ts) / 1000);
+      if (diff < 60) return 'just now';
+      if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+      if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+      return Math.floor(diff / 86400) + 'd ago';
+    }
 
-      try { localStorage.setItem('weddingRSVP', JSON.stringify(data)); } catch (e) {}
-      try { console.log('[RSVP]', data); } catch (e) {}
+    function render() {
+      if (!wall) return;
+      var list = load();
+      if (!list.length) {
+        wall.innerHTML = '<p class="wishes-empty">Be the first to leave a blessing for the couple ♥</p>';
+        return;
+      }
+      list.sort(function (a, b) { return b.ts - a.ts; });
+      wall.innerHTML = list.map(function (w) {
+        return (
+          '<figure class="wish-note">' +
+            '<p class="wish-note-body">' + escapeHTML(w.message) + '</p>' +
+            '<figcaption class="wish-note-author">' +
+              '<span class="wish-note-name">— ' + escapeHTML(w.name) + '</span>' +
+              '<span class="wish-note-time">' + timeAgo(w.ts) + '</span>' +
+            '</figcaption>' +
+          '</figure>'
+        );
+      }).join('');
+    }
 
-      form.hidden = true;
-      if (success) success.hidden = false;
+    function clearErrors() {
+      if (errN) errN.textContent = '';
+      if (errM) errM.textContent = '';
+      if (nameEl) nameEl.removeAttribute('aria-invalid');
+      if (msgEl) msgEl.removeAttribute('aria-invalid');
+    }
+
+    function validate() {
+      var ok = true;
+      clearErrors();
+      if (!nameEl || !nameEl.value.trim()) {
+        if (errN) errN.textContent = 'Please enter your name';
+        if (nameEl) nameEl.setAttribute('aria-invalid', 'true');
+        ok = false;
+      }
+      if (!msgEl || !msgEl.value.trim() || msgEl.value.trim().length < 3) {
+        if (errM) errM.textContent = 'Please write a blessing (at least 3 characters)';
+        if (msgEl) msgEl.setAttribute('aria-invalid', 'true');
+        ok = false;
+      }
+      return ok;
+    }
+
+    function saveLocal(name, message) {
+      var list = load();
+      list.push({ name: name, message: message, ts: Date.now() });
+      save(list);
+      render();
+      if (nameEl) nameEl.value = '';
+      if (msgEl) msgEl.value = '';
+    }
+
+    function sendToEmail(name, message) {
+      var url = 'https://formsubmit.co/ajax/' + encodeURIComponent(YOUR_EMAIL);
+      return fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: '💌 New Blessing from ' + name + ' — Wedding Invitation',
+          Name: name,
+          Blessing: message,
+          'Received At': new Date().toLocaleString('en-IN', {
+            timeZone: 'Asia/Kolkata',
+            day: '2-digit', month: 'short', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+          }),
+          _template: 'table',
+          _captcha: 'false'
+        })
+      }).then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      });
+    }
+
+    if (form) {
+      form.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        if (!validate()) return;
+
+        var name = nameEl.value.trim().slice(0, 40);
+        var message = msgEl.value.trim().slice(0, 220);
+        var origText = submitBtn ? submitBtn.textContent : '';
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Sending…';
+        }
+
+        sendToEmail(name, message).then(function () {
+          saveLocal(name, message);
+          if (submitBtn) {
+            submitBtn.textContent = '♥ Blessing Sent!';
+            setTimeout(function () {
+              submitBtn.textContent = origText;
+              submitBtn.disabled = false;
+            }, 2000);
+          }
+        }).catch(function (err) {
+          console.warn('[Wishes] Email send failed:', err);
+          saveLocal(name, message);
+          if (submitBtn) {
+            submitBtn.textContent = '✓ Saved locally';
+            setTimeout(function () {
+              submitBtn.textContent = origText;
+              submitBtn.disabled = false;
+            }, 2500);
+          }
+        });
+      });
+    }
+
+    render();
+    setInterval(render, 60000);
+  })();
+
+  /* =========================================================
+     GIFT QR DIALOG — LOCAL IMAGE
+     ========================================================= */
+  (function setupGiftQr() {
+    var btn      = $('#openGiftQr');
+    var dialog   = $('#qrDialog');
+    var img      = $('#qrImg');
+    var closeBtn = $('#qrClose');
+    if (!btn || !dialog || !img) return;
+
+    var QR_IMAGE_PATH = 'images/upi-qr.png';
+
+    if (!img.getAttribute('src') || img.getAttribute('src') === '') {
+      img.src = QR_IMAGE_PATH;
+    }
+
+    img.addEventListener('error', function () {
+      var wrap = img.parentElement;
+      if (!wrap) return;
+      wrap.innerHTML =
+        '<p style="padding:24px 18px;font-family:var(--font-sans);font-size:.86rem;line-height:1.6;color:#6b1e2e;text-align:center">' +
+        'QR image not found.<br>Please place your QR at <code>images/upi-qr.png</code>' +
+        '</p>';
     });
-  }
 
-  if (againBtn) {
-    againBtn.addEventListener('click', function () {
-      if (success) success.hidden = true;
-      if (form) form.hidden = false;
-      var nameEl = $('#rsvpName');
-      if (nameEl) nameEl.focus();
-    });
-  }
-
-  try {
-    var saved = localStorage.getItem('weddingRSVP');
-    if (saved) {
-      var d = JSON.parse(saved);
-      if (d.name)    { var n = $('#rsvpName');    if (n) n.value = d.name; }
-      if (d.contact) { var c = $('#rsvpContact'); if (c) c.value = d.contact; }
-      if (d.guests)  { var g = $('#rsvpGuests');  if (g) g.value = d.guests; }
-      if (d.message) { var m = $('#rsvpMsg');     if (m) m.value = d.message; }
+    function openDialog() {
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+      else dialog.setAttribute('open', '');
     }
-  } catch (e) {}
+    function closeDialog() {
+      if (typeof dialog.close === 'function') dialog.close();
+      else dialog.removeAttribute('open');
+    }
+
+    btn.addEventListener('click', openDialog);
+    if (closeBtn) closeBtn.addEventListener('click', closeDialog);
+
+    dialog.addEventListener('click', function (ev) {
+      if (ev.target === dialog) closeDialog();
+    });
+
+    dialog.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape') closeDialog();
+    });
+  })();
+
+  /* =========================================================
+     GALLERY LIGHTBOX
+     ========================================================= */
+  (function setupGallery() {
+    var grid = $('#galleryGrid');
+    if (!grid) return;
+    var dialog = $('#lightbox');
+    var img    = $('#lightboxImg');
+    var closeBtn = $('#lightboxClose');
+    var prevBtn  = $('#lightboxPrev');
+    var nextBtn  = $('#lightboxNext');
+    if (!dialog || !img || !closeBtn) return;
+
+    var items = $$('.gallery-item', grid).filter(function (it) {
+      return !it.classList.contains('is-empty');
+    });
+    var current = 0;
+
+    function show(idx) {
+      if (!items.length) return;
+      current = (idx + items.length) % items.length;
+      var src = items[current].querySelector('img');
+      if (!src) return;
+      img.src = src.currentSrc || src.src;
+      img.alt = src.alt || 'Photo';
+    }
+
+    grid.addEventListener('click', function (ev) {
+      var item = ev.target.closest('.gallery-item');
+      if (!item || item.classList.contains('is-empty')) return;
+      var idx = items.indexOf(item);
+      if (idx === -1) return;
+      show(idx);
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+      else dialog.setAttribute('open', '');
+    });
+
+    closeBtn.addEventListener('click', function () { dialog.close(); });
+    if (prevBtn) prevBtn.addEventListener('click', function () { show(current - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { show(current + 1); });
+
+    dialog.addEventListener('click', function (ev) {
+      if (ev.target === dialog) dialog.close();
+    });
+    dialog.addEventListener('keydown', function (ev) {
+      if (ev.key === 'ArrowLeft')  show(current - 1);
+      if (ev.key === 'ArrowRight') show(current + 1);
+    });
+  })();
 
 })();

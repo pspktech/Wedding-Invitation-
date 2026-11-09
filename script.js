@@ -629,4 +629,36 @@
     });
   })();
 
+  /* =========================================================
+      DYNAMIC MATERIAL-INSPIRED THEME
+      ========================================================= */
+  (function setupTheme() {
+    var btn = $('#themeBtn');
+    var meta = $('#themeColorMeta');
+    var media = window.matchMedia('(prefers-color-scheme: dark)');
+    var saved = null;
+    try { saved = localStorage.getItem('madhupotti-theme'); } catch (e) {}
+
+    function apply(theme) {
+      var dark = theme === 'midnight';
+      document.body.setAttribute('data-theme', dark ? 'midnight' : 'light');
+      if (btn) {
+        btn.classList.toggle('is-dark', dark);
+        btn.setAttribute('aria-pressed', String(dark));
+        btn.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+      }
+      if (meta) meta.setAttribute('content', dark ? '#14251f' : '#fbf5e9');
+    }
+
+    apply(saved || (media.matches ? 'midnight' : 'light'));
+    if (btn) {
+      btn.addEventListener('click', function () {
+        var next = document.body.getAttribute('data-theme') === 'midnight' ? 'light' : 'midnight';
+        apply(next);
+        try { localStorage.setItem('madhupotti-theme', next); } catch (e) {}
+      });
+    }
+    if (media.addEventListener && !saved) media.addEventListener('change', function (ev) { apply(ev.matches ? 'midnight' : 'light'); });
+  })();
+
 })();

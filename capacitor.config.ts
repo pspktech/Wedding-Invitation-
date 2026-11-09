@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.pspktech.weddinginvitation',
-  appName: 'Madhukar & Thanasri Wedding',
+  appName: 'MadhuPotti',
   webDir: 'www',
   bundledWebRuntime: false,
   android: {

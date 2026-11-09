@@ -1229,3 +1229,40 @@ body::before{
 .rsvp-status{min-height:1.4em;margin:14px 0 0;text-align:center;font-family:var(--font-sans);font-size:.78rem;color:var(--forest)}
 
 @media (prefers-reduced-motion: reduce){.story-card,.event-item{transition:none}}
+
+
+/* =========================================================
+   MADHUPOTTI PREMIUM POLISH + DYNAMIC THEME
+   ========================================================= */
+.brand-lockup{display:inline-flex;align-items:center;gap:9px;margin:0 auto 14px;padding:6px 12px 6px 8px;border:1px solid rgba(184,147,90,.34);border-radius:999px;background:rgba(255,253,248,.58);font-family:var(--font-sans);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--maroon);box-shadow:0 8px 20px rgba(92,64,22,.08)}
+.brand-lockup-mark{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;background:var(--forest);color:var(--gold-3);font-family:var(--font-serif);font-size:.72rem;letter-spacing:-.08em}
+.cover-text>*{animation:premiumRise .8s var(--ease) both}
+.cover-text .brand-lockup{animation-delay:.05s}.cover-text .cover-eyebrow{animation-delay:.12s}.cover-text .cover-title{animation-delay:.2s}.cover-text .cover-sub{animation-delay:.28s}.cover-text .cover-monogram{animation-delay:.36s}.cover-text .cover-names{animation-delay:.44s}.cover-text .cover-date{animation-delay:.5s}.cover-text .btn-open{animation-delay:.58s}
+@keyframes premiumRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.theme-btn{position:fixed;right:clamp(12px,3vw,22px);bottom:clamp(70px,10vw,84px);z-index:90;width:50px;height:50px;display:grid;place-items:center;border-radius:50%;cursor:pointer;color:var(--maroon);background:rgba(255,253,248,.9);border:1px solid rgba(184,147,90,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 10px 24px rgba(92,64,22,.2);transition:transform .25s var(--ease),background .3s,color .3s}
+.theme-btn:hover{transform:scale(1.08) rotate(8deg)}
+.theme-btn .theme-icon{grid-area:1/1;font-family:var(--font-serif);font-size:1.45rem;line-height:1;transition:opacity .25s,transform .35s}
+.theme-icon--moon{opacity:0;transform:rotate(-45deg) scale(.6)}
+.theme-btn.is-dark .theme-icon--sun{opacity:0;transform:rotate(45deg) scale(.6)}
+.theme-btn.is-dark .theme-icon--moon{opacity:1;transform:none}
+
+body[data-theme="midnight"]{--cream:#10221b;--paper:#172a22;--paper-2:#20372b;--ivory:#f6f0e5;--forest:#90b39a;--forest-deep:#31563f;--forest-dark:#0c1712;--terra:#e0a07d;--maroon:#f0b6a3;--gold:#cba56b;--gold-2:#e6bd79;--gold-3:#f4dca6;--gold-deep:#d6ad69;--ink:#f5ecdf;--ink-soft:#c5b7a7;--ink-faint:#9e968b;background:radial-gradient(circle at 10% 5%,rgba(203,165,107,.13),transparent 40%),radial-gradient(circle at 88% 0%,rgba(76,133,98,.18),transparent 48%),linear-gradient(180deg,#0b1712 0%,var(--cream) 55%,#1d3027 100%)}
+body[data-theme="midnight"]::before{opacity:.22}
+body[data-theme="midnight"] .cover{background:radial-gradient(120% 80% at 30% 0%,#20372b 0%,transparent 55%),linear-gradient(165deg,#10221b,var(--paper) 60%,#294534)}
+body[data-theme="midnight"] .cover-eyebrow,body[data-theme="midnight"] .brand-lockup,body[data-theme="midnight"] .cover-monogram{background:rgba(10,24,17,.48)}
+body[data-theme="midnight"] .brand-lockup{color:var(--gold-3)}
+body[data-theme="midnight"] .brand-lockup-mark{background:var(--gold-deep);color:#172a22}
+body[data-theme="midnight"] .theme-btn,body[data-theme="midnight"] .mute-btn{background:rgba(16,34,27,.86);color:var(--gold-3);border-color:rgba(230,189,121,.45)}
+body[data-theme="midnight"] .family-card,body[data-theme="midnight"] .story-card,body[data-theme="midnight"] .wish-form,body[data-theme="midnight"] .rsvp-form,body[data-theme="midnight"] .location-card,body[data-theme="midnight"] .wish-note{background:linear-gradient(160deg,rgba(39,65,51,.88),rgba(20,39,30,.82));border-color:rgba(230,189,121,.26)}
+body[data-theme="midnight"] .field input[type="text"],body[data-theme="midnight"] .field textarea,body[data-theme="midnight"] .rsvp-form select{background:rgba(8,20,14,.62);color:var(--ink);border-color:rgba(230,189,121,.3)}
+body[data-theme="midnight"] .section-title span{color:var(--gold-3)}
+body[data-theme="midnight"] .hero-veil{background:linear-gradient(to top,rgba(5,12,8,.9),rgba(5,12,8,.4) 55%,rgba(5,12,8,.2))}
+body[data-theme="midnight"] .muhurtham-card,body[data-theme="midnight"] .gift-card{box-shadow:0 30px 70px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.06)}
+
+@media(max-width:520px){
+  .brand-lockup{font-size:.64rem;letter-spacing:.14em}
+  .theme-btn{bottom:68px;width:46px;height:46px}
+  .mute-btn{width:46px;height:46px}
+  .event-actions .btn-map{flex:1 1 145px}
+}
+@media (prefers-reduced-motion: reduce){.cover-text>*{animation:none}.theme-btn .theme-icon{transition:none}}

@@ -29,6 +29,9 @@ jobs:
       - name: Create Android project and sync web assets
         run: npm run cap:add:android
 
+      - name: Apply MadhuPotti Android branding
+        run: npm run apply:android:branding
+
       - name: Set up Java
         uses: actions/setup-java@v5
         with:

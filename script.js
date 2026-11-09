@@ -800,10 +800,17 @@
           setStatus('Download complete. Opening Android installer…');
           return p.installApk({ downloadId: downloadId });
         }
-        if (result.state === 'failed') { setStatus('Download failed. Please try again.'); return; }
+        if (result.state === 'failed') {
+          nowBtn.disabled = false;
+          setStatus('Download status unavailable. Please tap Download & Install again.');
+          return;
+        }
         setStatus('Downloading update' + (result.progress ? ' · ' + result.progress + '%' : '…'));
         statusTimer = setTimeout(pollDownload, 800);
-      }).catch(function () { setStatus('Download status unavailable. Please try again.'); });
+      }).catch(function () {
+        nowBtn.disabled = false;
+        setStatus('Download status unavailable. Please tap Download & Install again.');
+      });
     }
     if (laterBtn) laterBtn.addEventListener('click', function () { if (dialog) dialog.close(); });
     if (nowBtn) nowBtn.addEventListener('click', function () {

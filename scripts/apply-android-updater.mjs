@@ -77,9 +77,9 @@ public class AppUpdaterPlugin extends Plugin {
         try (android.database.Cursor cursor = manager.query(new DownloadManager.Query().setFilterById(id))) {
             if (cursor == null || !cursor.moveToFirst()) { call.reject("Download not found"); return; }
             int status = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS));
-            int reason = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_REASON));
-            int downloaded = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
-            int total = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+            int reason = readInt(cursor, DownloadManager.COLUMN_REASON, 0);
+            long downloaded = readLong(cursor, DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR, 0L);
+            long total = readLong(cursor, DownloadManager.COLUMN_TOTAL_SIZE_BYTES, 0L);
             String state = "pending";
             if (status == DownloadManager.STATUS_RUNNING) state = "running";
             if (status == DownloadManager.STATUS_SUCCESSFUL) state = "successful";
@@ -88,11 +88,26 @@ public class AppUpdaterPlugin extends Plugin {
             result.put("state", state);
             result.put("reason", reason);
             result.put("progress", total > 0 ? Math.round(downloaded * 100f / total) : 0);
-            result.put("uri", manager.getUriForDownloadedFile(id) == null ? "" : manager.getUriForDownloadedFile(id).toString());
+            Uri downloadedUri = manager.getUriForDownloadedFile(id);
+            result.put("uri", downloadedUri == null ? "" : downloadedUri.toString());
             call.resolve(result);
         } catch (Exception error) {
-            call.reject("Unable to read download status", error);
+            JSObject result = new JSObject();
+            result.put("state", "failed");
+            result.put("reason", error.getMessage() == null ? "status_query_failed" : error.getMessage());
+            result.put("progress", 0);
+            call.resolve(result);
         }
+    }
+
+    private int readInt(android.database.Cursor cursor, String column, int fallback) {
+        int index = cursor.getColumnIndex(column);
+        return index >= 0 && !cursor.isNull(index) ? cursor.getInt(index) : fallback;
+    }
+
+    private long readLong(android.database.Cursor cursor, String column, long fallback) {
+        int index = cursor.getColumnIndex(column);
+        return index >= 0 && !cursor.isNull(index) ? cursor.getLong(index) : fallback;
     }
 
     @PluginMethod

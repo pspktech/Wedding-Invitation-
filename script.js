@@ -20,6 +20,21 @@
   var fadeTimer = null;
 
   /* =========================================================
+      PREMIUM APP START + MOTION
+      ========================================================= */
+  (function setupPremiumStart() {
+    var loader = $('#appLoader');
+    if (!loader) return;
+    function finish() {
+      loader.classList.add('is-done');
+      setTimeout(function () { loader.hidden = true; }, 900);
+    }
+    if (document.readyState === 'complete') setTimeout(finish, 520);
+    else window.addEventListener('load', function () { setTimeout(finish, 520); }, { once: true });
+    setTimeout(finish, 2200);
+  })();
+
+  /* =========================================================
       PRIVATE INVITATION ACCESS
       ========================================================= */
   (function setupAccessGate() {
@@ -138,6 +153,35 @@
   }
 
   if (openBtn) openBtn.addEventListener('click', openInvitation);
+
+  (function setupPremiumMotion() {
+    var heroImage = $('.section-hero .hero-media img');
+    var ticking = false;
+    function updateParallax() {
+      ticking = false;
+      if (!heroImage || reduceMotion.matches || document.hidden) return;
+      var y = Math.min(window.scrollY || 0, 360);
+      heroImage.style.transform = 'translate3d(0,' + (y * 0.08).toFixed(1) + 'px,0) scale(1.04)';
+    }
+    if (heroImage && !reduceMotion.matches) {
+      window.addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; window.requestAnimationFrame(updateParallax); }
+      }, { passive: true });
+    }
+    document.addEventListener('pointerdown', function (ev) {
+      if (reduceMotion.matches) return;
+      var target = ev.target.closest('.btn, .screen-nav button, .gift-actions button, .theme-btn');
+      if (!target || target.disabled) return;
+      var rect = target.getBoundingClientRect();
+      var ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      ripple.style.left = (ev.clientX - rect.left) + 'px';
+      ripple.style.top = (ev.clientY - rect.top) + 'px';
+      target.appendChild(ripple);
+      setTimeout(function () { ripple.remove(); }, 650);
+    }, { passive: true });
+    if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', updateParallax);
+  })();
 
   /* =========================================================
       COMPACT INVITATION CONTENT

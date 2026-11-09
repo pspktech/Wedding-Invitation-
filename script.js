@@ -1,5 +1,5 @@
 /* =========================================================
-   Wedding Invitation — script.js (FIXED, COMPLETE)
+   Wedding Invitation — script.js (Fixed + Scroll Reveal)
    ========================================================= */
 (function () {
   'use strict';
@@ -7,19 +7,16 @@
   var $ = function (sel, root) { return (root || document).querySelector(sel); };
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  /* =========================================================
-     0. ELEMENTS — OPEN BUTTON FIRST (critical!)
-     ========================================================= */
   var cover      = $('#cover');
   var invitation = $('#invitation');
   var openBtn    = $('#openBtn');
   var muteBtn    = $('#muteBtn');
   var audio      = $('#bgMusic');
 
-  var opened    = false;
+  var opened = false;
   var fadeTimer = null;
 
-  /* ---------- Music helpers ---------- */
+  /* ---------- Music ---------- */
   function fadeAudioIn() {
     if (!audio) return;
     var target = 0.28;
@@ -53,7 +50,6 @@
         if (muteBtn) muteBtn.hidden = false;
         syncMuteIcon();
       }).catch(function () {
-        // Autoplay blocked → show mute/play button so user can start manually
         if (muteBtn) muteBtn.hidden = false;
         syncMuteIcon();
       });
@@ -64,12 +60,11 @@
     }
   }
 
-  /* ---------- OPEN INVITATION (the main fix) ---------- */
+  /* ---------- Open invitation ---------- */
   function openInvitation() {
     if (opened) return;
     opened = true;
 
-    // Try music first — never let it block the transition
     try { startMusic(); } catch (e) { /* ignore */ }
 
     document.body.classList.remove('is-locked');
@@ -82,28 +77,23 @@
 
     if (invitation) {
       invitation.classList.add('is-visible');
-      invitation.setAttribute('tabindex', '-1');
     }
 
-    // After fade-out, fully hide the cover
     setTimeout(function () {
       if (cover) cover.hidden = true;
       if (invitation) {
         try { invitation.focus({ preventScroll: true }); }
         catch (e) { invitation.focus(); }
       }
+      initReveals();
     }, 950);
   }
 
   if (openBtn) {
     openBtn.addEventListener('click', openInvitation);
-  } else {
-    console.warn('[Wedding] #openBtn not found — check index.html');
   }
 
-  /* =========================================================
-     1. MUTE / UNMUTE
-     ========================================================= */
+  /* ---------- Mute ---------- */
   if (muteBtn && audio) {
     muteBtn.addEventListener('click', function () {
       if (audio.paused) {
@@ -125,9 +115,29 @@
     audio.addEventListener('pause', syncMuteIcon);
   }
 
-  /* =========================================================
-     2. FLOATING LEAVES
-     ========================================================= */
+  /* ---------- Scroll reveal ---------- */
+  function initReveals() {
+    var els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+
+    if (reduceMotion.matches || !('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('is-in'); });
+      return;
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14, rootMargin: '0px 0px -60px 0px' });
+
+    els.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- Floating leaves ---------- */
   function buildLeaves() {
     var layer = $('#leafLayer');
     if (!layer) return;
@@ -135,9 +145,9 @@
     if (reduceMotion.matches) return;
 
     var narrow = window.innerWidth < 720;
-    var total  = narrow ? 12 : 22;
+    var total  = narrow ? 10 : 18;
     var shapes = ['leaf-a', 'leaf-b', 'petal'];
-    var colors = ['#c9a227', '#8fa183', '#b4643f', '#d8b23c', '#a3b394', '#e0b264'];
+    var colors = ['#b8935a', '#3d5a40', '#b4643f', '#d4a967', '#6b8a6f', '#d4a967'];
     var frag   = document.createDocumentFragment();
 
     for (var i = 0; i < total; i++) {
@@ -147,7 +157,7 @@
       var sway  = 3 + Math.random() * 4;
       var delay = -Math.random() * dur;
       var drift = (Math.random() * 2 - 1) * 22;
-      var op    = 0.3 + Math.random() * 0.4;
+      var op    = 0.28 + Math.random() * 0.35;
 
       var el = document.createElement('span');
       el.className = 'leaf';
@@ -160,17 +170,13 @@
         '--drift:'  + drift.toFixed(1) + 'vw;' +
         '--op:'     + op.toFixed(2) + ';' +
         '--leaf-color:' + colors[i % colors.length] + ';';
-
-      el.innerHTML =
-        '<svg viewBox="0 0 40 60" aria-hidden="true" focusable="false">' +
-        '<use href="#' + shape + '"/></svg>';
-
+      el.innerHTML = '<svg viewBox="0 0 40 60" aria-hidden="true" focusable="false"><use href="#' + shape + '"/></svg>';
       frag.appendChild(el);
     }
     layer.appendChild(frag);
   }
 
-  try { buildLeaves(); } catch (e) { /* ignore */ }
+  try { buildLeaves(); } catch (e) {}
 
   var leafRebuildTimer = null;
   window.addEventListener('resize', function () {
@@ -181,9 +187,7 @@
     reduceMotion.addEventListener('change', buildLeaves);
   }
 
-  /* =========================================================
-     3. COUNTDOWN
-     ========================================================= */
+  /* ---------- Countdown ---------- */
   var WEDDING_TS = new Date('2026-02-07T11:11:00+05:30').getTime();
   var cdEls  = { d: $('#cdDays'), h: $('#cdHours'), m: $('#cdMinutes'), s: $('#cdSeconds') };
   var cdPrev = { d: '', h: '', m: '', s: '' };
@@ -225,9 +229,7 @@
     if (!tickCountdown()) clearInterval(cdTimer);
   }, 1000);
 
-  /* =========================================================
-     4. RSVP FORM
-     ========================================================= */
+  /* ---------- RSVP ---------- */
   var form     = $('#rsvpForm');
   var success  = $('#rsvpSuccess');
   var againBtn = $('#rsvpAgain');
@@ -242,7 +244,6 @@
   function validateForm() {
     var ok = true;
     clearErrors();
-
     var nameEl    = $('#rsvpName');
     var contactEl = $('#rsvpContact');
     if (!nameEl || !contactEl) return false;
@@ -267,7 +268,6 @@
     } else {
       contactEl.removeAttribute('aria-invalid');
     }
-
     return ok;
   }
 
@@ -298,7 +298,6 @@
     });
   }
 
-  /* Restore saved RSVP */
   try {
     var saved = localStorage.getItem('weddingRSVP');
     if (saved) {

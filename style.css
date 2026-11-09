@@ -1396,3 +1396,17 @@ body[data-theme="midnight"] .app-loader{background:radial-gradient(circle at 50%
 .update-notes{white-space:pre-line;text-align:left;padding:13px 15px;border:1px solid rgba(184,147,90,.24);border-radius:14px;background:rgba(255,253,248,.42);font-size:.86rem;line-height:1.55}
 body[data-theme="midnight"] .update-notes{background:rgba(8,20,14,.46);border-color:rgba(230,189,121,.25);color:var(--ink)}
 @media(max-width:420px){.count-cell{min-height:76px;padding:11px 2px}.count-num{font-size:clamp(1.52rem,8vw,2rem)}.count-label{font-size:.55rem;letter-spacing:.06em}.count-label em{font-size:.82em}.count-note{font-size:.58rem;letter-spacing:.08em}}
+
+/* =========================================================
+   LARGE COUPLE PORTRAIT GALLERY
+   ========================================================= */
+@media(max-width:719px){
+  #invitation[data-active-screen="couple"] .couple-grid{display:flex;grid-template-columns:none;align-items:stretch;justify-content:flex-start;gap:16px;overflow-x:auto;overflow-y:visible;margin:0 -12px;padding:0 12px 18px;scroll-snap-type:x mandatory;scroll-padding-inline:12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  #invitation[data-active-screen="couple"] .couple-grid::-webkit-scrollbar{display:none}
+  #invitation[data-active-screen="couple"] .couple-card,#invitation[data-active-screen="couple"] .couple-card--center{flex:0 0 min(76vw,330px);width:min(76vw,330px);max-width:none;scroll-snap-align:center;scroll-snap-stop:always}
+  #invitation[data-active-screen="couple"] .couple-card .photo-arch,#invitation[data-active-screen="couple"] .couple-card--center .photo-arch{width:100%;aspect-ratio:4/5;border-radius:999px 999px 20px 20px;box-shadow:0 18px 38px rgba(92,64,22,.18),inset 0 0 0 6px rgba(255,253,248,.52)}
+  #invitation[data-active-screen="couple"] .couple-card--center{transform:none}
+  #invitation[data-active-screen="couple"] .couple-card figcaption{padding:0 4px}
+  #invitation[data-active-screen="couple"] .couple-name{font-size:clamp(1rem,4.4vw,1.25rem)}
+  #invitation[data-active-screen="couple"] .couple-name-te{font-size:clamp(.78rem,3.2vw,1rem)}
+}

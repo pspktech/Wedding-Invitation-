@@ -1,0 +1,74 @@
+name: Release MadhuPotti APK
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version, for example 1.0.1'
+        required: true
+        default: '1.0.1'
+
+permissions:
+  contents: write
+
+jobs:
+  release-apk:
+    name: Build and publish release APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install JavaScript dependencies
+        run: npm ci
+
+      - name: Create Android project and sync web assets
+        run: npm run cap:add:android
+
+      - name: Apply MadhuPotti branding
+        run: npm run apply:android:branding
+
+      - name: Apply native in-app APK updater
+        run: npm run apply:android:updater
+
+      - name: Set release version
+        env:
+          TAG_VERSION: ${{ github.ref_type == 'tag' && github.ref_name || inputs.version }}
+        run: |
+          VERSION="${TAG_VERSION#v}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          VERSION_CODE=$((MAJOR * 10000 + MINOR * 100 + PATCH))
+          sed -i -E "s/versionCode [0-9]+/versionCode ${VERSION_CODE}/; s/versionName \"[^\"]+\"/versionName \"${VERSION}\"/" android/app/build.gradle
+          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+          echo "VERSION_CODE=${VERSION_CODE}" >> "$GITHUB_ENV"
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Build release APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          RELEASE_TAG="v${VERSION}"
+          gh release create "$RELEASE_TAG" \
+            android/app/build/outputs/apk/debug/app-debug.apk \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "MadhuPotti ${VERSION}" \
+            --generate-notes

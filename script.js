@@ -136,6 +136,9 @@
       if (typeof window.__refreshCountdown === 'function') {
         window.__refreshCountdown();
       }
+      if (typeof window.__checkForAppUpdate === 'function') {
+        setTimeout(window.__checkForAppUpdate, 1200);
+      }
     }, 950);
   }
 
@@ -788,6 +791,98 @@
       });
     }
     if (media.addEventListener && !saved) media.addEventListener('change', function (ev) { apply(ev.matches ? 'midnight' : 'light'); });
+  })();
+
+  /* =========================================================
+      IN-APP APK UPDATE CHECKER
+      ========================================================= */
+  (function setupAppUpdater() {
+    var dialog = $('#updateDialog');
+    var versionEl = $('#updateVersion');
+    var notesEl = $('#updateNotes');
+    var statusEl = $('#updateStatus');
+    var laterBtn = $('#updateLater');
+    var nowBtn = $('#updateNow');
+    var release = null;
+    var downloadId = null;
+    var statusTimer = null;
+    var API = 'https://api.github.com/repos/pspktech/Wedding-Invitation-/releases/latest';
+
+    function plugin() {
+      return window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.AppUpdater;
+    }
+    function cleanVersion(value) {
+      return String(value || '').replace(/^v/i, '').split('-')[0];
+    }
+    function parts(value) {
+      return cleanVersion(value).split('.').map(function (n) { return parseInt(n, 10) || 0; });
+    }
+    function isNewer(remote, current) {
+      var a = parts(remote); var b = parts(current);
+      for (var i = 0; i < 3; i += 1) { if ((a[i] || 0) !== (b[i] || 0)) return (a[i] || 0) > (b[i] || 0); }
+      return false;
+    }
+    function setStatus(text) { if (statusEl) statusEl.textContent = text || ''; }
+    function currentVersion() {
+      var p = plugin();
+      if (p && p.getAppVersion) return p.getAppVersion().then(function (result) { return result.version || '1.0.0'; });
+      return Promise.resolve('1.0.0');
+    }
+    function showUpdate(remoteVersion, body) {
+      if (!dialog) return;
+      if (versionEl) versionEl.textContent = 'Version ' + remoteVersion;
+      if (notesEl) notesEl.textContent = body || 'A refreshed version of your wedding invitation is ready.';
+      setStatus('');
+      if (dialog.showModal) dialog.showModal();
+      else dialog.setAttribute('open', '');
+    }
+    function checkForUpdate() {
+      currentVersion().then(function (current) {
+        return fetch(API, { headers: { Accept: 'application/vnd.github+json' } }).then(function (res) {
+          if (!res.ok) throw new Error('release check failed');
+          return res.json().then(function (data) { return { data: data, current: current }; });
+        });
+      }).then(function (result) {
+        var data = result.data;
+        if (!data || data.draft || data.prerelease || !isNewer(data.tag_name, result.current)) return;
+        var asset = (data.assets || []).find(function (item) { return item.name && item.name.toLowerCase().endsWith('.apk'); });
+        if (!asset) return;
+        release = { version: cleanVersion(data.tag_name), notes: data.body || '', url: asset.browser_download_url, name: asset.name };
+        showUpdate(release.version, release.notes);
+      }).catch(function () {});
+    }
+    function pollDownload() {
+      var p = plugin();
+      if (!p || !p.getDownloadStatus || downloadId === null) return;
+      p.getDownloadStatus({ downloadId: downloadId }).then(function (result) {
+        if (result.state === 'successful') {
+          setStatus('Download complete. Opening Android installer…');
+          return p.installApk({ downloadId: downloadId });
+        }
+        if (result.state === 'failed') { setStatus('Download failed. Please try again.'); return; }
+        setStatus('Downloading update' + (result.progress ? ' · ' + result.progress + '%' : '…'));
+        statusTimer = setTimeout(pollDownload, 800);
+      }).catch(function () { setStatus('Download status unavailable. Please try again.'); });
+    }
+    if (laterBtn) laterBtn.addEventListener('click', function () { if (dialog) dialog.close(); });
+    if (nowBtn) nowBtn.addEventListener('click', function () {
+      if (!release) return;
+      var p = plugin();
+      if (!p || !p.downloadApk) {
+        window.open(release.url, '_blank', 'noopener');
+        return;
+      }
+      nowBtn.disabled = true;
+      setStatus('Preparing secure APK download…');
+      p.downloadApk({ url: release.url, fileName: release.name || ('MadhuPotti-' + release.version + '.apk') }).then(function (result) {
+        downloadId = result.downloadId;
+        pollDownload();
+      }).catch(function (error) {
+        nowBtn.disabled = false;
+        setStatus(error && error.message ? error.message : 'Could not start the update download.');
+      });
+    });
+    window.__checkForAppUpdate = checkForUpdate;
   })();
 
 })();

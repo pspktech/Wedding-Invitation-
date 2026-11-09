@@ -32,6 +32,9 @@ jobs:
       - name: Apply MadhuPotti Android branding
         run: npm run apply:android:branding
 
+      - name: Apply native in-app APK updater
+        run: npm run apply:android:updater
+
       - name: Set up Java
         uses: actions/setup-java@v5
         with:

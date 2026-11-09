@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare:web": "node scripts/prepare-web.mjs",
     "apply:android:branding": "node scripts/apply-android-branding.mjs",
+    "apply:android:updater": "node scripts/apply-android-updater.mjs",
     "cap:add:android": "npm run prepare:web && cap add android",
     "cap:sync": "npm run prepare:web && cap sync android"
   },

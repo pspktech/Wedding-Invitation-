@@ -562,6 +562,22 @@
   <button type="button" data-screen="rsvp" aria-label="RSVP and gifts"><span aria-hidden="true">✉</span><small>RSVP</small></button>
 </nav>
 
+<!-- ===== IN-APP UPDATE DIALOG ===== -->
+<dialog class="update-dialog" id="updateDialog" aria-labelledby="updateTitle">
+  <div class="update-dialog-inner">
+    <span class="update-badge" aria-hidden="true">↻</span>
+    <p class="access-brand">MadhuPotti update</p>
+    <h2 id="updateTitle">A newer invitation is ready</h2>
+    <p id="updateVersion" class="update-version"></p>
+    <p id="updateNotes" class="update-notes"></p>
+    <p id="updateStatus" class="update-status" role="status" aria-live="polite"></p>
+    <div class="update-actions">
+      <button class="btn btn-map" id="updateLater" type="button">Later</button>
+      <button class="btn btn-open" id="updateNow" type="button"><span>Download &amp; Install</span><small>అప్‌డేట్ చేయండి</small></button>
+    </div>
+  </div>
+</dialog>
+
 <!-- ===== GIFT QR DIALOG ===== -->
 <dialog class="qr-dialog" id="qrDialog" aria-label="Gift QR code">
   <button class="qr-close" id="qrClose" type="button" aria-label="Close">×</button>

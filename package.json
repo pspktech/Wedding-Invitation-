@@ -1,0 +1,32 @@
+{
+  "name": "wedding-invitation-",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare:web": "node scripts/prepare-web.mjs",
+    "cap:add:android": "npm run prepare:web && cap add android",
+    "cap:sync": "npm run prepare:web && cap sync android"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pspktech/Wedding-Invitation-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pspktech/Wedding-Invitation-/issues"
+  },
+  "homepage": "https://github.com/pspktech/Wedding-Invitation-#readme",
+  "dependencies": {
+    "@capacitor/core": "8.6.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "8.6.0",
+    "@capacitor/cli": "8.6.0",
+    "typescript": "5.9.3"
+  },
+  "private": true
+}

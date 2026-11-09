@@ -791,6 +791,7 @@
     var release = null;
     var downloadId = null;
     var statusTimer = null;
+    var statusRetries = 0;
     var API = 'https://api.github.com/repos/pspktech/Wedding-Invitation-/releases/latest';
 
     function plugin() {
@@ -845,6 +846,12 @@
           return p.installApk({ downloadId: downloadId });
         }
         if (result.state === 'failed') {
+          if (statusRetries < 8) {
+            statusRetries += 1;
+            setStatus('Starting secure download…');
+            statusTimer = setTimeout(pollDownload, 900);
+            return;
+          }
           nowBtn.disabled = false;
           setStatus('Download status unavailable. Please tap Download & Install again.');
           return;
@@ -852,6 +859,12 @@
         setStatus('Downloading update' + (result.progress ? ' · ' + result.progress + '%' : '…'));
         statusTimer = setTimeout(pollDownload, 800);
       }).catch(function () {
+        if (statusRetries < 8) {
+          statusRetries += 1;
+          setStatus('Starting secure download…');
+          statusTimer = setTimeout(pollDownload, 900);
+          return;
+        }
         nowBtn.disabled = false;
         setStatus('Download status unavailable. Please tap Download & Install again.');
       });
@@ -868,7 +881,9 @@
       setStatus('Preparing secure APK download…');
       p.downloadApk({ url: release.url, fileName: release.name || ('MadhuPotti-' + release.version + '.apk') }).then(function (result) {
         downloadId = result.downloadId;
-        pollDownload();
+        statusRetries = 0;
+        setStatus('Download started…');
+        statusTimer = setTimeout(pollDownload, 1000);
       }).catch(function (error) {
         nowBtn.disabled = false;
         setStatus(error && error.message ? error.message : 'Could not start the update download.');

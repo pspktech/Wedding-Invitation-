@@ -75,7 +75,14 @@ public class AppUpdaterPlugin extends Plugin {
         if (id < 0) { call.reject("Invalid download id"); return; }
         DownloadManager manager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
         try (android.database.Cursor cursor = manager.query(new DownloadManager.Query().setFilterById(id))) {
-            if (cursor == null || !cursor.moveToFirst()) { call.reject("Download not found"); return; }
+            if (cursor == null || !cursor.moveToFirst()) {
+                JSObject result = new JSObject();
+                result.put("state", "checking");
+                result.put("reason", "download_registering");
+                result.put("progress", 0);
+                call.resolve(result);
+                return;
+            }
             int status = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS));
             int reason = readInt(cursor, DownloadManager.COLUMN_REASON, 0);
             long downloaded = readLong(cursor, DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR, 0L);
@@ -93,7 +100,7 @@ public class AppUpdaterPlugin extends Plugin {
             call.resolve(result);
         } catch (Exception error) {
             JSObject result = new JSObject();
-            result.put("state", "failed");
+            result.put("state", "checking");
             result.put("reason", error.getMessage() == null ? "status_query_failed" : error.getMessage());
             result.put("progress", 0);
             call.resolve(result);

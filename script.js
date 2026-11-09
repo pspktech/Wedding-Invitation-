@@ -4,12 +4,7 @@
 (function () {
   'use strict';
 
-  /* =========================================================
-      ⚠️ CONFIG — CHANGE THIS!
-      ⚠️ Mee email ikkada pettu. Blessings ikkadiki vastayi.
-      ========================================================= */
   var YOUR_EMAIL = 'pawankalyanfan110@gmail.com';
-  /* ========================================================= */
 
   var $  = function (sel, root) { return (root || document).querySelector(sel); };
   var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
@@ -199,10 +194,10 @@
     var groups = {
       home: ['.section-hero', '.section--blessing'],
       couple: ['.section--couple'],
-      story: ['.section--story', '.section--families'],
+      story: ['.section--story', '.section--journey', '.section--families'],
       events: ['.section--muhurtham', '.section--events', '.section--location'],
       gallery: ['.section--gallery'],
-      rsvp: ['.section--rsvp', '.section--blessings', '.footer']
+      gifts: ['.section--blessings', '.footer']
     };
     var current = 'home';
 
@@ -706,60 +701,6 @@
     }
   })();
 
-  /* =========================================================
-      RSVP
-      ========================================================= */
-  (function setupRsvp() {
-    var form = $('#rsvpForm');
-    if (!form) return;
-    var nameEl = $('#rsvpName');
-    var guestsEl = $('#rsvpGuests');
-    var responseEl = $('#rsvpResponse');
-    var noteEl = $('#rsvpNote');
-    var errorEl = $('#errRsvpName');
-    var statusEl = $('#rsvpStatus');
-    var submitBtn = form.querySelector('button[type="submit"]');
-
-    function showStatus(text) { if (statusEl) statusEl.textContent = text; }
-    function saveLocal(rsvp) {
-      try {
-        var list = JSON.parse(localStorage.getItem('weddingRsvps') || '[]');
-        list.push(rsvp);
-        localStorage.setItem('weddingRsvps', JSON.stringify(list));
-      } catch (e) {}
-    }
-    function sendRsvp(rsvp) {
-      return fetch('https://formsubmit.co/ajax/' + encodeURIComponent(YOUR_EMAIL), {
-        method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          _subject: 'RSVP — Madhukar & Thanasri Wedding',
-          Name: rsvp.name, Attendance: rsvp.response, Guests: rsvp.guests, Message: rsvp.note || '—',
-          'Event Date': '07 February 2027 · 11:11 AM IST', _template: 'table', _captcha: 'false'
-        })
-      }).then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); });
-    }
-
-    form.addEventListener('submit', function (ev) {
-      ev.preventDefault();
-      var name = nameEl.value.trim();
-      if (!name) {
-        if (errorEl) errorEl.textContent = 'Please enter your name';
-        nameEl.setAttribute('aria-invalid', 'true');
-        return;
-      }
-      if (errorEl) errorEl.textContent = '';
-      nameEl.removeAttribute('aria-invalid');
-      var rsvp = { name: name.slice(0, 40), guests: guestsEl.value, response: responseEl.value, note: noteEl.value.trim().slice(0, 180), ts: Date.now() };
-      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
-      sendRsvp(rsvp).then(function () {
-        saveLocal(rsvp); form.reset(); showStatus('Thank you — your RSVP has been sent ♥');
-      }).catch(function () {
-        saveLocal(rsvp); form.reset(); showStatus('Your RSVP is saved on this device. Please contact the family if needed.');
-      }).finally(function () {
-        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send RSVP ♥'; }
-      });
-    });
-  })();
 
   /* =========================================================
       DYNAMIC MATERIAL-INSPIRED THEME

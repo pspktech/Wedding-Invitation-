@@ -229,7 +229,7 @@
   <div class="compact-toggle-wrap">
     <button class="compact-toggle" id="moreToggle" type="button" aria-expanded="false" aria-controls="moreContent">
       <span class="compact-toggle-icon" aria-hidden="true">＋</span>
-      <span><strong>Explore the full celebration</strong><small>Story · Events · Gallery · RSVP</small></span>
+      <span><strong>Explore the full celebration</strong><small>Story · Love Journey · Gallery · Gifts</small></span>
     </button>
   </div>
 
@@ -252,6 +252,38 @@
       </div>
     </div>
   </section>
+
+<!-- LOVE JOURNEY SECTION -->
+<section class="section section--journey reveal" aria-labelledby="journeyTitle">
+  <div class="container">
+    <header class="section-head">
+      <span class="section-icon" aria-hidden="true">∞</span>
+      <h2 class="section-title" id="journeyTitle">
+        <span>Our Love Journey</span>
+        <em>మా ప్రేమ ప్రయాణం</em>
+      </h2>
+    </header>
+
+    <div class="journey-timeline">
+      <article class="journey-step journey-step--left">
+        <span class="journey-dot">01</span>
+        <div class="journey-card"><span class="journey-label">The beginning</span><h3>Two paths, one feeling</h3><p>Some stories begin quietly — with a smile, a conversation, and a feeling that stays.</p></div>
+      </article>
+      <article class="journey-step journey-step--right">
+        <span class="journey-dot">02</span>
+        <div class="journey-card"><span class="journey-label">Growing together</span><h3>Everyday became special</h3><p>With patience, laughter, and the love of our families, two hearts found their rhythm.</p></div>
+      </article>
+      <article class="journey-step journey-step--left">
+        <span class="journey-dot">03</span>
+        <div class="journey-card"><span class="journey-label">The promise</span><h3>A forever to choose</h3><p>Today we choose each other — in every season, every celebration, and every tomorrow.</p></div>
+      </article>
+      <article class="journey-step journey-step--right journey-step--final">
+        <span class="journey-dot">♥</span>
+        <div class="journey-card"><span class="journey-label">07 February 2027</span><h3>Forever begins here</h3><p>With your blessings, our next chapter begins in Hajipur, Mancherial.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
 
   <!-- 5. WITH BLESSINGS OF -->
   <section class="section section--families reveal" aria-labelledby="familiesTitle">
@@ -348,7 +380,6 @@
     <button type="button" data-section-target="countdown">Countdown</button>
     <button type="button" data-section-target="eventsTitle">Events</button>
     <button type="button" data-section-target="galleryTitle">Gallery</button>
-    <button type="button" data-section-target="rsvpTitle">RSVP</button>
     <button type="button" data-section-target="blessingsTitle">Gifts / QR</button>
   </nav>
 
@@ -449,29 +480,7 @@
     </div>
   </section>
 
-  <!-- 10. RSVP -->
-  <section class="section section--rsvp reveal" aria-labelledby="rsvpTitle">
-    <div class="container">
-      <header class="section-head">
-        <span class="section-icon" aria-hidden="true">♥</span>
-        <h2 class="section-title" id="rsvpTitle">
-          <span>Will You Join Us?</span>
-          <em>మీ రాకను తెలియజేయండి</em>
-        </h2>
-      </header>
-      <p class="rsvp-intro">Please let us know how many guests will be joining the celebration.</p>
-      <form class="rsvp-form" id="rsvpForm" novalidate>
-        <div class="field"><label for="rsvpName">Your Name</label><input id="rsvpName" name="name" type="text" autocomplete="name" placeholder="Your name" required maxlength="40" aria-describedby="errRsvpName"><span class="error" id="errRsvpName" role="alert"></span></div>
-        <div class="field"><label for="rsvpGuests">Guests</label><select id="rsvpGuests" name="guests"><option value="1">1 guest</option><option value="2">2 guests</option><option value="3">3 guests</option><option value="4">4 guests</option><option value="5+">5+ guests</option></select></div>
-        <div class="field field--full"><label for="rsvpResponse">Will you attend?</label><select id="rsvpResponse" name="response"><option value="Joyfully attending">Joyfully attending</option><option value="Unable to attend">Unable to attend</option><option value="Not sure yet">Not sure yet</option></select></div>
-        <div class="field field--full"><label for="rsvpNote">Message <span class="optional">(optional)</span></label><textarea id="rsvpNote" name="note" rows="2" maxlength="180" placeholder="Any note for the family…"></textarea></div>
-        <div class="field field--full"><button class="btn btn-submit" type="submit">Send RSVP ♥</button></div>
-      </form>
-      <p class="rsvp-status" id="rsvpStatus" role="status" aria-live="polite"></p>
-    </div>
-  </section>
-
-  <!-- 11. BLESSINGS & GIFTS -->
+  <!-- 10. BLESSINGS & GIFTS -->
   <section class="section section--blessings reveal" aria-labelledby="blessingsTitle">
     <div class="container">
       <header class="section-head">
@@ -559,7 +568,7 @@
   <button type="button" data-screen="story" aria-label="Story"><span aria-hidden="true">✦</span><small>Story</small></button>
   <button type="button" data-screen="events" aria-label="Events"><span aria-hidden="true">◷</span><small>Events</small></button>
   <button type="button" data-screen="gallery" aria-label="Gallery"><span aria-hidden="true">▧</span><small>Gallery</small></button>
-  <button type="button" data-screen="rsvp" aria-label="RSVP and gifts"><span aria-hidden="true">✉</span><small>RSVP</small></button>
+  <button type="button" data-screen="gifts" aria-label="Gifts and blessings"><span aria-hidden="true">✉</span><small>Gifts</small></button>
 </nav>
 
 <!-- ===== IN-APP UPDATE DIALOG ===== -->

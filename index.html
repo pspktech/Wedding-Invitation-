@@ -102,7 +102,7 @@
       <p class="cover-sub">మా పెళ్లికి మీకు హృదయపూర్వక స్వాగతం</p>
       <div class="cover-monogram" aria-hidden="true"><span>M</span><em>♥</em><span>T</span></div>
       <p class="cover-names">Pudari Madhukar &amp; Budde Thanasri</p>
-      <p class="cover-date">Saturday · 07 February 2027 · Mancherial</p>
+      <p class="cover-date">Sunday · 07 February 2027 · Mancherial</p>
       <button class="btn btn-open" id="openBtn" type="button">
         <span>Open Invitation</span>
         <small>ఆహ్వానం చూడండి</small>
@@ -111,7 +111,7 @@
     </div>
     <div class="cover-photo">
       <div class="photo-arch photo-arch--hero">
-        <img src="images/couple.jpg" alt="The couple" loading="eager" onerror="this.style.display='none'">
+        <img src="images/couple.webp" alt="The couple" loading="eager" fetchpriority="high" onerror="this.style.display='none'">
         <span class="photo-fallback" aria-hidden="true">M ♥ T</span>
       </div>
       <svg class="corner corner--tl" viewBox="0 0 220 220" aria-hidden="true"><use href="#corner-vine"/></svg>
@@ -127,7 +127,7 @@
   <section class="section-hero reveal">
     <div class="hero-stage">
       <div class="hero-media">
-        <img src="images/couple.jpg" alt="Pudari Madhukar and Budde Thanasri" loading="eager" onerror="this.parentElement.classList.add('is-fallback')">
+        <img src="images/couple.webp" alt="Pudari Madhukar and Budde Thanasri" loading="eager" fetchpriority="high" onerror="this.parentElement.classList.add('is-fallback')">
       </div>
       <div class="hero-veil"></div>
       <div class="hero-content">
@@ -172,7 +172,7 @@
       <div class="couple-grid">
         <figure class="couple-card">
           <div class="photo-arch">
-            <img src="images/groom.jpg" alt="Pudari Madhukar, the groom" loading="lazy" onerror="this.style.display='none'">
+            <img src="images/groom.webp" alt="Pudari Madhukar, the groom" loading="lazy" onerror="this.style.display='none'">
             <span class="photo-fallback" aria-hidden="true">M</span>
           </div>
           <figcaption>
@@ -184,7 +184,7 @@
 
         <figure class="couple-card couple-card--center">
           <div class="photo-arch">
-            <img src="images/couple.jpg" alt="Madhukar and Thanasri together" loading="lazy" onerror="this.style.display='none'">
+            <img src="images/couple.webp" alt="Madhukar and Thanasri together" loading="lazy" onerror="this.style.display='none'">
             <span class="photo-fallback" aria-hidden="true">♥</span>
           </div>
           <figcaption>
@@ -195,7 +195,7 @@
 
         <figure class="couple-card">
           <div class="photo-arch">
-            <img src="images/bride.jpg" alt="Budde Thanasri, the bride" loading="lazy" onerror="this.style.display='none'">
+            <img src="images/bride.webp" alt="Budde Thanasri, the bride" loading="lazy" onerror="this.style.display='none'">
             <span class="photo-fallback" aria-hidden="true">T</span>
           </div>
           <figcaption>
@@ -208,7 +208,25 @@
     </div>
   </section>
 
-  <!-- 4. WITH BLESSINGS OF -->
+  <!-- 4. OUR STORY -->
+  <section class="section section--story reveal" aria-labelledby="storyTitle">
+    <div class="container">
+      <header class="section-head">
+        <span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#icon-heart"/></svg></span>
+        <h2 class="section-title" id="storyTitle">
+          <span>Our Story</span>
+          <em>మా కథ</em>
+        </h2>
+      </header>
+      <div class="story-grid">
+        <article class="story-card"><span class="story-number">01</span><h3>Two hearts</h3><p>Two lives found a beautiful rhythm in each other.</p></article>
+        <article class="story-card"><span class="story-number">02</span><h3>One promise</h3><p>With the love of our families, we begin a new chapter together.</p></article>
+        <article class="story-card"><span class="story-number">03</span><h3>Forever begins</h3><p>Our wedding day becomes the first page of our forever.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. WITH BLESSINGS OF -->
   <section class="section section--families reveal" aria-labelledby="familiesTitle">
     <div class="container">
       <header class="section-head">
@@ -243,7 +261,7 @@
     </div>
   </section>
 
-  <!-- 5. MUHURTHAM (Premium card with countdown) -->
+  <!-- 6. MUHURTHAM (Premium card with countdown) -->
   <section class="section section--muhurtham reveal" aria-labelledby="muhurthamTitle">
     <div class="container">
       <div class="muhurtham-card">
@@ -262,7 +280,7 @@
           <div class="mcard-datetime">
             <div class="mcard-dt-item">
               <span class="mcard-label">Date</span>
-              <span class="mcard-day">Saturday</span>
+              <span class="mcard-day">Sunday</span>
               <span class="mcard-date">07 February 2027</span>
             </div>
             <span class="mcard-divider" aria-hidden="true"></span>
@@ -294,7 +312,30 @@
     </div>
   </section>
 
-  <!-- 6. GALLERY -->
+  <!-- 7. EVENTS & CALENDAR -->
+  <section class="section section--events reveal" aria-labelledby="eventsTitle">
+    <div class="container">
+      <header class="section-head">
+        <span class="section-icon" aria-hidden="true">✦</span>
+        <h2 class="section-title" id="eventsTitle">
+          <span>Save the Moments</span>
+          <em>కార్యక్రమ వివరాలు</em>
+        </h2>
+      </header>
+      <div class="event-timeline">
+        <article class="event-item"><span class="event-dot"></span><div><span class="event-label">Wedding celebrations</span><h3>Details to be announced</h3><p>Additional ceremony timings will be updated here soon.</p></div></article>
+        <article class="event-item event-item--confirmed"><span class="event-dot"></span><div><span class="event-label">Muhurtham · శుభ ముహూర్తం</span><h3>Sunday · 07 February 2027</h3><p>11:11 AM IST · Hajipur, Mancherial</p></div></article>
+        <article class="event-item"><span class="event-dot"></span><div><span class="event-label">Reception</span><h3>Details to be announced</h3><p>Watch this space for the celebration schedule.</p></div></article>
+      </div>
+      <div class="event-actions">
+        <button class="btn btn-map" id="addCalendarBtn" type="button"><span>＋ Add to Calendar</span></button>
+        <button class="btn btn-map" id="shareBtn" type="button"><span>↗ Share Invitation</span></button>
+        <p class="share-status" id="shareStatus" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. GALLERY -->
   <section class="section section--gallery reveal" aria-labelledby="galleryTitle">
     <div class="container container--wide">
       <header class="section-head">
@@ -307,34 +348,22 @@
 
       <div class="gallery-grid" id="galleryGrid">
         <figure class="gallery-item gallery-item--tall" data-index="0">
-          <img src="images/gallery1.jpg" alt="Memory 1" loading="lazy" onerror="this.parentElement.classList.add('is-empty')">
+            <img src="images/gallery1.webp" alt="Memory 1" loading="lazy" onerror="this.parentElement.classList.add('is-empty')">
           <span class="gallery-fallback" aria-hidden="true">♥</span>
         </figure>
         <figure class="gallery-item" data-index="1">
-          <img src="images/gallery2.jpg" alt="Memory 2" loading="lazy" onerror="this.parentElement.classList.add('is-empty')">
+          <img src="images/gallery2.webp" alt="Memory 2" loading="lazy" onerror="this.parentElement.classList.add('is-empty')">
           <span class="gallery-fallback" aria-hidden="true">♥</span>
         </figure>
         <figure class="gallery-item" data-index="2">
-          <img src="images/gallery3.jpg" alt="Memory 3" loading="lazy" onerror="this.parentElement.classList.add('is-empty')">
-          <span class="gallery-fallback" aria-hidden="true">♥</span>
-        </figure>
-        <figure class="gallery-item gallery-item--wide" data-index="3">
-          <img src="images/gallery4.jpg" alt="Memory 4" loading="lazy" onerror="this.parentElement.classList.add('is-empty')">
-          <span class="gallery-fallback" aria-hidden="true">♥</span>
-        </figure>
-        <figure class="gallery-item" data-index="4">
-          <img src="images/gallery5.jpg" alt="Memory 5" loading="lazy" onerror="this.parentElement.classList.add('is-empty')">
-          <span class="gallery-fallback" aria-hidden="true">♥</span>
-        </figure>
-        <figure class="gallery-item" data-index="5">
-          <img src="images/gallery6.jpg" alt="Memory 6" loading="lazy" onerror="this.parentElement.classList.add('is-empty')">
+          <img src="images/gallery3.webp" alt="Memory 3" loading="lazy" onerror="this.parentElement.classList.add('is-empty')">
           <span class="gallery-fallback" aria-hidden="true">♥</span>
         </figure>
       </div>
     </div>
   </section>
 
-  <!-- 7. LOCATION -->
+  <!-- 9. LOCATION -->
   <section class="section section--location reveal" aria-labelledby="locationTitle">
     <div class="container">
       <header class="section-head">
@@ -378,7 +407,29 @@
     </div>
   </section>
 
-  <!-- 8. BLESSINGS & GIFTS -->
+  <!-- 10. RSVP -->
+  <section class="section section--rsvp reveal" aria-labelledby="rsvpTitle">
+    <div class="container">
+      <header class="section-head">
+        <span class="section-icon" aria-hidden="true">♥</span>
+        <h2 class="section-title" id="rsvpTitle">
+          <span>Will You Join Us?</span>
+          <em>మీ రాకను తెలియజేయండి</em>
+        </h2>
+      </header>
+      <p class="rsvp-intro">Please let us know how many guests will be joining the celebration.</p>
+      <form class="rsvp-form" id="rsvpForm" novalidate>
+        <div class="field"><label for="rsvpName">Your Name</label><input id="rsvpName" name="name" type="text" autocomplete="name" placeholder="Your name" required maxlength="40" aria-describedby="errRsvpName"><span class="error" id="errRsvpName" role="alert"></span></div>
+        <div class="field"><label for="rsvpGuests">Guests</label><select id="rsvpGuests" name="guests"><option value="1">1 guest</option><option value="2">2 guests</option><option value="3">3 guests</option><option value="4">4 guests</option><option value="5+">5+ guests</option></select></div>
+        <div class="field field--full"><label for="rsvpResponse">Will you attend?</label><select id="rsvpResponse" name="response"><option value="Joyfully attending">Joyfully attending</option><option value="Unable to attend">Unable to attend</option><option value="Not sure yet">Not sure yet</option></select></div>
+        <div class="field field--full"><label for="rsvpNote">Message <span class="optional">(optional)</span></label><textarea id="rsvpNote" name="note" rows="2" maxlength="180" placeholder="Any note for the family…"></textarea></div>
+        <div class="field field--full"><button class="btn btn-submit" type="submit">Send RSVP ♥</button></div>
+      </form>
+      <p class="rsvp-status" id="rsvpStatus" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- 11. BLESSINGS & GIFTS -->
   <section class="section section--blessings reveal" aria-labelledby="blessingsTitle">
     <div class="container">
       <header class="section-head">
@@ -445,7 +496,7 @@
     </div>
   </section>
 
-  <!-- 9. FOOTER -->
+  <!-- 12. FOOTER -->
   <footer class="footer reveal">
     <div class="container">
       <svg class="divider" viewBox="0 0 240 40" aria-hidden="true"><use href="#divider"/></svg>

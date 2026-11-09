@@ -525,4 +525,108 @@
     });
   })();
 
+  /* =========================================================
+      SHARE + CALENDAR
+      ========================================================= */
+  (function setupShareAndCalendar() {
+    var shareBtn = $('#shareBtn');
+    var calendarBtn = $('#addCalendarBtn');
+    var status = $('#shareStatus');
+    var shareText = 'You are warmly invited to the wedding of Pudari Madhukar & Budde Thanasri on 07 February 2027 at 11:11 AM in Hajipur, Mancherial.';
+
+    function setStatus(text) {
+      if (status) status.textContent = text;
+    }
+
+    if (shareBtn) {
+      shareBtn.addEventListener('click', function () {
+        var shareData = { title: 'Madhukar & Thanasri · Wedding Invitation', text: shareText, url: window.location.href };
+        if (navigator.share) {
+          navigator.share(shareData).then(function () { setStatus('Invitation shared with love ♥'); }).catch(function () {});
+          return;
+        }
+        var waUrl = 'https://wa.me/?text=' + encodeURIComponent(shareText + ' ' + window.location.href);
+        window.open(waUrl, '_blank', 'noopener,noreferrer');
+        setStatus('Opening WhatsApp…');
+      });
+    }
+
+    if (calendarBtn) {
+      calendarBtn.addEventListener('click', function () {
+        var ics = [
+          'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Madhukar and Thanasri//Wedding Invitation//EN',
+          'CALSCALE:GREGORIAN', 'BEGIN:VEVENT', 'UID:madhukar-thanasri-2027@wedding-invitation',
+          'DTSTAMP:20261110T000000Z', 'DTSTART:20270207T054100Z', 'DTEND:20270207T074100Z',
+          'SUMMARY:Madhukar & Thanasri — Muhurtham', 'LOCATION:Hajipur, Mancherial, Telangana 504207, India',
+          'DESCRIPTION:Wedding muhurtham at 11:11 AM IST.\nMadhukar & Thanasri.', 'END:VEVENT', 'END:VCALENDAR'
+        ].join('\r\n');
+        var blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'madhukar-thanasri-wedding.ics';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+        setStatus('Calendar invite downloaded ♥');
+      });
+    }
+  })();
+
+  /* =========================================================
+      RSVP
+      ========================================================= */
+  (function setupRsvp() {
+    var form = $('#rsvpForm');
+    if (!form) return;
+    var nameEl = $('#rsvpName');
+    var guestsEl = $('#rsvpGuests');
+    var responseEl = $('#rsvpResponse');
+    var noteEl = $('#rsvpNote');
+    var errorEl = $('#errRsvpName');
+    var statusEl = $('#rsvpStatus');
+    var submitBtn = form.querySelector('button[type="submit"]');
+
+    function showStatus(text) { if (statusEl) statusEl.textContent = text; }
+    function saveLocal(rsvp) {
+      try {
+        var list = JSON.parse(localStorage.getItem('weddingRsvps') || '[]');
+        list.push(rsvp);
+        localStorage.setItem('weddingRsvps', JSON.stringify(list));
+      } catch (e) {}
+    }
+    function sendRsvp(rsvp) {
+      return fetch('https://formsubmit.co/ajax/' + encodeURIComponent(YOUR_EMAIL), {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: 'RSVP — Madhukar & Thanasri Wedding',
+          Name: rsvp.name, Attendance: rsvp.response, Guests: rsvp.guests, Message: rsvp.note || '—',
+          'Event Date': '07 February 2027 · 11:11 AM IST', _template: 'table', _captcha: 'false'
+        })
+      }).then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); });
+    }
+
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var name = nameEl.value.trim();
+      if (!name) {
+        if (errorEl) errorEl.textContent = 'Please enter your name';
+        nameEl.setAttribute('aria-invalid', 'true');
+        return;
+      }
+      if (errorEl) errorEl.textContent = '';
+      nameEl.removeAttribute('aria-invalid');
+      var rsvp = { name: name.slice(0, 40), guests: guestsEl.value, response: responseEl.value, note: noteEl.value.trim().slice(0, 180), ts: Date.now() };
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
+      sendRsvp(rsvp).then(function () {
+        saveLocal(rsvp); form.reset(); showStatus('Thank you — your RSVP has been sent ♥');
+      }).catch(function () {
+        saveLocal(rsvp); form.reset(); showStatus('Your RSVP is saved on this device. Please contact the family if needed.');
+      }).finally(function () {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send RSVP ♥'; }
+      });
+    });
+  })();
+
 })();

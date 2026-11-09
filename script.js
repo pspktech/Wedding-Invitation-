@@ -186,6 +186,53 @@
   })();
 
   /* =========================================================
+      MULTI-SCREEN APP NAVIGATION
+      ========================================================= */
+  (function setupScreens() {
+    var nav = $('#screenNav');
+    if (!nav || !invitation) return;
+    var panels = $$('.more-content');
+    var allSections = $$('section, footer', invitation);
+    var groups = {
+      home: ['.section-hero', '.section--blessing'],
+      couple: ['.section--couple'],
+      story: ['.section--story', '.section--families'],
+      events: ['.section--muhurtham', '.section--events', '.section--location'],
+      gallery: ['.section--gallery'],
+      rsvp: ['.section--rsvp', '.section--blessings', '.footer']
+    };
+    var current = 'home';
+
+    function setScreen(name) {
+      if (!groups[name]) name = 'home';
+      current = name;
+      panels.forEach(function (panel) { panel.hidden = false; });
+      allSections.forEach(function (section) {
+        var visible = groups[name].some(function (selector) { return section.matches(selector); });
+        section.classList.toggle('screen-active', visible);
+        section.classList.toggle('screen-hidden', !visible);
+      });
+      nav.querySelectorAll('[data-screen]').forEach(function (button) {
+        var active = button.getAttribute('data-screen') === name;
+        button.classList.toggle('is-active', active);
+        if (active) button.setAttribute('aria-current', 'page');
+        else button.removeAttribute('aria-current');
+      });
+      invitation.setAttribute('data-screen-mode', 'multiple');
+      invitation.setAttribute('data-active-screen', name);
+      initReveals();
+      window.scrollTo({ top: 0, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+    }
+
+    nav.querySelectorAll('[data-screen]').forEach(function (button) {
+      button.addEventListener('click', function () { setScreen(button.getAttribute('data-screen')); });
+    });
+    nav.hidden = false;
+    window.__setInvitationScreen = setScreen;
+    setScreen(current);
+  })();
+
+  /* =========================================================
       MUTE
       ========================================================= */
   if (muteBtn && audio) {
